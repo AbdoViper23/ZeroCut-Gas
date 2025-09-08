@@ -1,10 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ZeroCutLogo from "@/components/ZeroCutLogo";
 import AbstractShapes from "@/components/AbstractShapes";
 import { ArrowRight } from "lucide-react";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleOpenOrCreate = () => {
+    navigate("/wallet");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-background flex">
       {/* Left Section - Login Content */}
@@ -62,7 +69,7 @@ const Login = () => {
 
           {/* CTA Section */}
           <div className="space-y-4 pt-4">
-            <Button variant="hero" size="xl" className="group">
+              <Button variant="hero" size="xl" className="group" onClick={handleOpenOrCreate}>              
               Open or Create
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Button>
