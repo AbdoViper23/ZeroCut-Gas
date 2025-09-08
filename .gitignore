@@ -21,5 +21,34 @@ node_modules/
 dist/
 .svelte-kit/
 
+# Vite
+.vite/
+frontend/.vite/
+
+# Build outputs
+frontend/dist/
+frontend/build/
+
+# IDE and editor files
+frontend/.vscode/
+frontend/.idea/
+
+# Logs
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Coverage directory used by tools like istanbul
+frontend/coverage/
+
+# Dependency directories specific to frontend
+frontend/node_modules/
+
+# Optional cache
+frontend/.npm
+frontend/.cache/
+
 # environment variables
 .env
