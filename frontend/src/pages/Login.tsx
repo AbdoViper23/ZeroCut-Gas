@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ZeroCutLogo from "@/components/ZeroCutLogo";
 import AbstractShapes from "@/components/AbstractShapes";
+import DotGrid from "@/components/DotGrid";
 import { ArrowRight } from "lucide-react";
 
 const Login = () => {
@@ -13,7 +14,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-background flex">
+    <div className="min-h-screen bg-gradient-background flex" style={{ position: "relative" }}>
+      {/* DotGrid Background */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0, // top/right/bottom/left = 0
+          zIndex: -1,
+        }}
+      >
+        <DotGrid
+          dotSize={5}
+          gap={10}
+          baseColor="#5227FF"
+          activeColor="#ff4800"
+          proximity={120}
+          shockRadius={250}
+          shockStrength={5}
+          resistance={750}
+          returnDuration={1.5}
+        />
+      </div>
       {/* Left Section - Login Content */}
       <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 max-w-2xl">
         {/* Header with Logo */}
