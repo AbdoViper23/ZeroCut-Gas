@@ -67,11 +67,6 @@ const WalletSidebar: React.FC<WalletSidebarProps> = ({ activeSection, onSectionC
                 )}>
                   {item.label}
                 </span>
-                {item.id === "rewards" && (
-                  <span className="ml-auto bg-destructive text-destructive-foreground text-xs px-2 py-0.5 rounded-full">
-                    NEW
-                  </span>
-                )}
               </button>
             );
           })}

@@ -43,9 +43,9 @@ const AssetsContent = ({ onActiveItemChange, activeInfiniteMenuItem }: {
   <div className="space-y-6">
     <div style={{ 
       height: '350px', 
-      width: '100%',
+      width: '150%',
       position: 'relative',
-      margin: '0 -1.5rem', // Extend beyond the padding of the parent container
+      margin: '0 -15rem', // Extend much further beyond the container
       borderRadius: '0.75rem',
       overflow: 'hidden'
     }}>
@@ -92,9 +92,6 @@ const RewardsContent = () => (
       </div>
       <h3 className="text-xl font-semibold text-foreground">Daily Rewards</h3>
       <p className="text-muted-foreground">Complete tasks and earn ZeroCut Sprinkles daily.</p>
-      <div className="inline-flex items-center gap-2 px-4 py-2 bg-destructive/20 text-destructive rounded-full">
-        <span className="text-sm font-medium">NEW</span>
-      </div>
     </div>
   </div>
 );
