@@ -13,95 +13,147 @@ interface Token {
   color: string;
 }
 
-const tokens: Token[] = [
-  {
-    id: "btc",
-    name: "Bitcoin",
-    symbol: "BTC",
-    network: "Bitcoin • Internet Computer",
-    balance: "0",
-    value: "$0.00",
-    icon: "₿",
-    color: "bg-orange-500"
-  },
-  {
-    id: "eth",
-    name: "Ethereum",
-    symbol: "ETH",
-    network: "Ethereum • Internet Computer • Base • Arbitrum",
-    balance: "0",
-    value: "$0.00",
-    icon: "◊",
-    color: "bg-blue-500"
-  },
-  {
-    id: "icp",
-    name: "Internet Computer",
-    symbol: "ICP",
-    network: "Internet Computer",
-    balance: "0",
-    value: "$0.00",
-    icon: "∞",
-    color: "bg-purple-500"
-  },
-  {
-    id: "sol",
-    name: "Solana",
-    symbol: "SOL",
-    network: "Solana",
-    balance: "0",
-    value: "$0.00",
-    icon: "◉",
-    color: "bg-gradient-to-r from-purple-400 to-pink-400"
-  },
-  {
-    id: "usdc",
-    name: "USDC",
-    symbol: "USDC",
-    network: "Internet Computer • Ethereum",
-    balance: "0",
-    value: "$0.00",
-    icon: "$",
-    color: "bg-blue-600"
-  },
-  {
-    id: "bnb",
-    name: "BNB",
-    symbol: "BNB",
-    network: "BNB Smart Chain",
-    balance: "0",
-    value: "$0.00",
-    icon: "◈",
-    color: "bg-yellow-500"
-  },
-  {
-    id: "pol",
-    name: "POL (prev. MATIC)",
-    symbol: "POL",
-    network: "Polygon",
-    balance: "0",
-    value: "$0.00",
-    icon: "⬟",
-    color: "bg-purple-600"
-  },
-  {
-    id: "usdt",
-    name: "Tether USD",
-    symbol: "USDT",
-    network: "Internet Computer • Ethereum",
-    balance: "0",
-    value: "$0.00",
-    icon: "₮",
-    color: "bg-green-500"
-  }
-];
+// Networks tokens mapping
+const networkTokens: Record<number, Token[]> = {
+  // Ethereum
+  0: [
+    {
+      id: "usdt-eth",
+      name: "Tether USD",
+      symbol: "USDT",
+      network: "Ethereum",
+      balance: "0",
+      value: "$0.00",
+      icon: "₮",
+      color: "bg-green-500"
+    },
+    {
+      id: "usdc-eth",
+      name: "USDC",
+      symbol: "USDC",
+      network: "Ethereum",
+      balance: "0",
+      value: "$0.00",
+      icon: "$",
+      color: "bg-blue-600"
+    },
+    {
+      id: "eth",
+      name: "Ethereum",
+      symbol: "ETH",
+      network: "Ethereum",
+      balance: "0",
+      value: "$0.00",
+      icon: "◊",
+      color: "bg-blue-500"
+    }
+  ],
+  // Base
+  1: [
+    {
+      id: "eth-base",
+      name: "Ethereum",
+      symbol: "ETH",
+      network: "Base",
+      balance: "0",
+      value: "$0.00",
+      icon: "◊",
+      color: "bg-blue-500"
+    }
+  ],
+  // Bitcoin
+  2: [
+    {
+      id: "btc",
+      name: "Bitcoin",
+      symbol: "BTC",
+      network: "Bitcoin",
+      balance: "0",
+      value: "$0.00",
+      icon: "₿",
+      color: "bg-orange-500"
+    }
+  ],
+  // Arbitrum
+  3: [
+    {
+      id: "eth-arbitrum",
+      name: "Ethereum",
+      symbol: "ETH",
+      network: "Arbitrum",
+      balance: "0",
+      value: "$0.00",
+      icon: "◊",
+      color: "bg-blue-500"
+    }
+  ],
+  // ICP
+  4: [
+    {
+      id: "cketh",
+      name: "Chain Key Ethereum",
+      symbol: "ckETH",
+      network: "Internet Computer",
+      balance: "0",
+      value: "$0.00",
+      icon: "◊",
+      color: "bg-blue-500"
+    },
+    {
+      id: "ckusdt",
+      name: "Chain Key USDT",
+      symbol: "ckUSDT",
+      network: "Internet Computer",
+      balance: "0",
+      value: "$0.00",
+      icon: "₮",
+      color: "bg-green-500"
+    },
+    {
+      id: "ckusdc",
+      name: "Chain Key USDC",
+      symbol: "ckUSDC",
+      network: "Internet Computer",
+      balance: "0",
+      value: "$0.00",
+      icon: "$",
+      color: "bg-blue-600"
+    },
+    {
+      id: "ckbtc",
+      name: "Chain Key Bitcoin",
+      symbol: "ckBTC",
+      network: "Internet Computer",
+      balance: "0",
+      value: "$0.00",
+      icon: "₿",
+      color: "bg-orange-500"
+    }
+  ]
+};
 
-const TokenList = () => {
+interface TokenListProps {
+  selectedNetwork?: number;
+}
+
+const TokenList = ({ selectedNetwork = 0 }: TokenListProps) => {
+  // Get tokens for the selected network
+  const tokens = networkTokens[selectedNetwork] || networkTokens[0];
+  
+  // Network names
+  const networkNames = ["Ethereum", "Base", "Bitcoin", "Arbitrum", "ICP"];
+  const currentNetwork = networkNames[selectedNetwork] || "Ethereum";
+  
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">Tokens</h2>
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">Tokens</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Network: <span className="text-primary font-medium">{currentNetwork}</span>
+          </p>
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm">
             Search
