@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 
@@ -22,8 +23,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Tether USD",
       symbol: "USDT",
       network: "Ethereum",
-      balance: "0",
-      value: "$0.00",
+      balance: "1,250.50",
+      value: "$1,250.50",
       icon: "₮",
       color: "bg-green-500"
     },
@@ -32,8 +33,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "USDC",
       symbol: "USDC",
       network: "Ethereum",
-      balance: "0",
-      value: "$0.00",
+      balance: "500.00",
+      value: "$500.00",
       icon: "$",
       color: "bg-blue-600"
     },
@@ -42,8 +43,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Ethereum",
       symbol: "ETH",
       network: "Ethereum",
-      balance: "0",
-      value: "$0.00",
+      balance: "2.5",
+      value: "$8,750.00",
       icon: "◊",
       color: "bg-blue-500"
     }
@@ -55,8 +56,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Ethereum",
       symbol: "ETH",
       network: "Base",
-      balance: "0",
-      value: "$0.00",
+      balance: "3.2",
+      value: "$11,200.00",
       icon: "◊",
       color: "bg-blue-500"
     }
@@ -68,8 +69,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Bitcoin",
       symbol: "BTC",
       network: "Bitcoin",
-      balance: "0",
-      value: "$0.00",
+      balance: "0.15",
+      value: "$15,750.00",
       icon: "₿",
       color: "bg-orange-500"
     }
@@ -81,8 +82,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Ethereum",
       symbol: "ETH",
       network: "Arbitrum",
-      balance: "0",
-      value: "$0.00",
+      balance: "1.8",
+      value: "$6,300.00",
       icon: "◊",
       color: "bg-blue-500"
     }
@@ -94,8 +95,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Chain Key Ethereum",
       symbol: "ckETH",
       network: "Internet Computer",
-      balance: "0",
-      value: "$0.00",
+      balance: "1.8",
+      value: "$6,300.00",
       icon: "◊",
       color: "bg-blue-500"
     },
@@ -104,8 +105,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Chain Key USDT",
       symbol: "ckUSDT",
       network: "Internet Computer",
-      balance: "0",
-      value: "$0.00",
+      balance: "2,000.00",
+      value: "$2,000.00",
       icon: "₮",
       color: "bg-green-500"
     },
@@ -114,8 +115,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Chain Key USDC",
       symbol: "ckUSDC",
       network: "Internet Computer",
-      balance: "0",
-      value: "$0.00",
+      balance: "750.25",
+      value: "$750.25",
       icon: "$",
       color: "bg-blue-600"
     },
@@ -124,8 +125,8 @@ const networkTokens: Record<number, Token[]> = {
       name: "Chain Key Bitcoin",
       symbol: "ckBTC",
       network: "Internet Computer",
-      balance: "0",
-      value: "$0.00",
+      balance: "0.05",
+      value: "$5,250.00",
       icon: "₿",
       color: "bg-orange-500"
     }
@@ -137,12 +138,18 @@ interface TokenListProps {
 }
 
 const TokenList = ({ selectedNetwork = 0 }: TokenListProps) => {
+  const navigate = useNavigate();
+  
   // Get tokens for the selected network
   const tokens = networkTokens[selectedNetwork] || networkTokens[0];
   
   // Network names
   const networkNames = ["Ethereum", "Base", "Bitcoin", "Arbitrum", "ICP"];
   const currentNetwork = networkNames[selectedNetwork] || "Ethereum";
+
+  const handleTokenClick = (tokenId: string) => {
+    navigate(`/transfer/${tokenId}`);
+  };
   
   return (
     <div className="space-y-6">
@@ -169,7 +176,8 @@ const TokenList = ({ selectedNetwork = 0 }: TokenListProps) => {
         {tokens.map((token) => (
           <div
             key={token.id}
-            className="bg-gradient-surface border border-border/20 rounded-xl p-4 hover:bg-surface/50 transition-colors cursor-pointer"
+            onClick={() => handleTokenClick(token.id)}
+            className="bg-gradient-surface border border-border/20 rounded-xl p-4 hover:bg-surface/50 transition-colors cursor-pointer group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">

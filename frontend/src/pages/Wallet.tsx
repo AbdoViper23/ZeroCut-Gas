@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import WalletSidebar from "@/components/WalletSidebar";
 import WalletTopBar from "@/components/WalletTopBar";
 import BalanceCard from "@/components/BalanceCard";
@@ -60,17 +61,46 @@ const AssetsContent = ({ onActiveItemChange, activeInfiniteMenuItem }: {
   </div>
 );
 
-const ActivityContent = () => (
-  <div className="bg-gradient-surface border border-border/20 rounded-2xl p-8 shadow-soft text-center">
-    <div className="space-y-4">
-      <div className="w-16 h-16 bg-gradient-primary rounded-2xl mx-auto flex items-center justify-center">
-        <div className="w-8 h-8 bg-primary-foreground rounded-lg"></div>
+const ActivityContent = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const fromTransfer = params.get('section') === 'activity';
+
+  return (
+    <div className="space-y-6">
+      {fromTransfer && (
+        <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <div>
+              <h4 className="font-semibold text-green-400">Transaction Successful!</h4>
+              <p className="text-sm text-muted-foreground">Your transfer has been completed successfully.</p>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div className="bg-gradient-surface border border-border/20 rounded-2xl p-8 shadow-soft text-center">
+        <div className="space-y-4">
+          <div className="w-16 h-16 bg-gradient-primary rounded-2xl mx-auto flex items-center justify-center">
+            <div className="w-8 h-8 bg-primary-foreground rounded-lg"></div>
+          </div>
+          <h3 className="text-xl font-semibold text-foreground">
+            {fromTransfer ? "Transaction History" : "No Activity Yet"}
+          </h3>
+          <p className="text-muted-foreground">
+            {fromTransfer 
+              ? "Your recent transaction and history will appear here." 
+              : "Your transaction history will appear here."
+            }
+          </p>
+        </div>
       </div>
-      <h3 className="text-xl font-semibold text-foreground">No Activity Yet</h3>
-      <p className="text-muted-foreground">Your transaction history will appear here.</p>
     </div>
-  </div>
-);
+  );
+};
 
 const ExploreContent = () => (
   <div className="bg-gradient-surface border border-border/20 rounded-2xl p-8 shadow-soft text-center">
@@ -109,8 +139,18 @@ const SettingsContent = () => (
 );
 
 const Wallet = () => {
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState("assets");
   const [activeInfiniteMenuItem, setActiveInfiniteMenuItem] = useState(0);
+
+  // Check for section parameter in URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const section = params.get('section');
+    if (section) {
+      setActiveSection(section);
+    }
+  }, [location.search]);
 
   // Function to handle active item change
   const handleActiveItemChange = (itemIndex: number) => {
