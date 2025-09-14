@@ -2,15 +2,61 @@ import React, { useState } from "react";
 import WalletSidebar from "@/components/WalletSidebar";
 import WalletTopBar from "@/components/WalletTopBar";
 import BalanceCard from "@/components/BalanceCard";
-import PromoCard from "@/components/PromoCard";
 import TokenList from "@/components/TokenList";
+import Orb from '@/components/Orb';
+import InfiniteMenu from '@/components/InfiniteMenu';
+import RippleGrid from '@/components/RippleGrid';
 
-// Content components for different sections
-const AssetsContent = () => (
+const items = [
+  {
+    image: '/Ethereum-logo.png',
+    title: 'Ethereum',
+    description: 'Smart contracts and DeFi ecosystem'
+  },
+  {
+    image: '/base-logo.jpg',
+    title: 'Base',
+    description: 'Layer 2 solution built on Ethereum'
+  },
+  {
+    image: '/BTC-logo.png',
+    title: 'Bitcoin',
+    description: 'The original cryptocurrency'
+  },
+  {
+    image: '/arbitrum-logo.png',
+    title: 'Arbitrum',
+    description: 'Optimistic rollup for Ethereum'
+  },
+  {
+    image: '/ICP-logo.jpeg',
+    title: 'ICP',
+    description: 'Internet Computer'
+  }
+];
+
+// Content components for different sections  
+const AssetsContent = ({ onActiveItemChange, activeInfiniteMenuItem }: { 
+  onActiveItemChange: (index: number) => void, 
+  activeInfiniteMenuItem: number 
+}) => (
   <div className="space-y-6">
+    <div style={{ 
+      height: '350px', 
+      width: '100%',
+      position: 'relative',
+      margin: '0 -1.5rem', // Extend beyond the padding of the parent container
+      borderRadius: '0.75rem',
+      overflow: 'hidden'
+    }}>
+      <InfiniteMenu 
+        items={items}
+        onActiveItemChange={onActiveItemChange}
+      />
+    </div>
+    
     <BalanceCard />
-    <PromoCard />
-    <TokenList />
+    <TokenList selectedNetwork={activeInfiniteMenuItem} />
   </div>
 );
 
@@ -67,11 +113,21 @@ const SettingsContent = () => (
 
 const Wallet = () => {
   const [activeSection, setActiveSection] = useState("assets");
+  const [activeInfiniteMenuItem, setActiveInfiniteMenuItem] = useState(0);
+
+  // Function to handle active item change
+  const handleActiveItemChange = (itemIndex: number) => {
+    setActiveInfiniteMenuItem(itemIndex);
+    console.log('Active item changed to:', itemIndex, items[itemIndex]);
+  };
 
   const renderContent = () => {
     switch (activeSection) {
       case "assets":
-        return <AssetsContent />;
+        return <AssetsContent 
+          onActiveItemChange={handleActiveItemChange}
+          activeInfiniteMenuItem={activeInfiniteMenuItem}
+        />;
       case "activity":
         return <ActivityContent />;
       case "explore":
@@ -81,13 +137,49 @@ const Wallet = () => {
       case "settings":
         return <SettingsContent />;
       default:
-        return <AssetsContent />;
+        return <AssetsContent 
+          onActiveItemChange={handleActiveItemChange}
+          activeInfiniteMenuItem={activeInfiniteMenuItem}
+        />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-background flex">
-      {/* Sidebar */}
+      <div className="min-h-screen bg-gradient-background flex" style={{ position: "relative" }}>
+        {/* Background */}
+        <div style={{ 
+          position: "fixed", 
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: -1, 
+          overflow: "hidden",
+          width: "60%", 
+          height: "60%",
+          minWidth: "400px", 
+          minHeight: "400px",
+          pointerEvents: "none"
+        }}>
+          <RippleGrid
+            enableRainbow={false}
+            gridColor="#00ffe1"
+            rippleIntensity={0.05}
+            gridSize={10}
+            gridThickness={15}
+            mouseInteraction={true}
+            mouseInteractionRadius={1.2}
+            opacity={0.8}
+          />
+        
+         {/* <Orb
+          hoverIntensity={2}
+          rotateOnHover={true}
+          hue={0}
+          forceHoverState={false}
+        /> */}
+
+        </div>
+        {/* Sidebar */}
       <WalletSidebar 
         activeSection={activeSection} 
         onSectionChange={setActiveSection} 
