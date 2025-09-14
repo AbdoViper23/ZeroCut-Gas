@@ -508,24 +508,43 @@ class ArcballControl {
     this.canvas = canvas;
     this.updateCallback = updateCallback || (() => undefined);
 
-    canvas.addEventListener('pointerdown', (e: PointerEvent) => {
+    // Bind event handlers to preserve 'this' context
+    this.handlePointerDown = this.handlePointerDown.bind(this);
+    this.handlePointerUp = this.handlePointerUp.bind(this);
+    this.handlePointerMove = this.handlePointerMove.bind(this);
+
+    canvas.addEventListener('pointerdown', this.handlePointerDown);
+    // Register global events for better control when mouse leaves canvas
+    document.addEventListener('pointerup', this.handlePointerUp);
+    document.addEventListener('pointermove', this.handlePointerMove);
+
+    canvas.style.touchAction = 'none';
+  }
+
+  private handlePointerDown = (e: PointerEvent) => {
+    // Only respond to events on our canvas
+    if (e.target === this.canvas) {
       vec2.set(this.pointerPos, e.clientX, e.clientY);
       vec2.copy(this.previousPointerPos, this.pointerPos);
       this.isPointerDown = true;
-    });
-    canvas.addEventListener('pointerup', () => {
-      this.isPointerDown = false;
-    });
-    canvas.addEventListener('pointerleave', () => {
-      this.isPointerDown = false;
-    });
-    canvas.addEventListener('pointermove', (e: PointerEvent) => {
-      if (this.isPointerDown) {
-        vec2.set(this.pointerPos, e.clientX, e.clientY);
-      }
-    });
+    }
+  };
 
-    canvas.style.touchAction = 'none';
+  private handlePointerUp = () => {
+    this.isPointerDown = false;
+  };
+
+  private handlePointerMove = (e: PointerEvent) => {
+    if (this.isPointerDown) {
+      vec2.set(this.pointerPos, e.clientX, e.clientY);
+    }
+  };
+
+  public destroy(): void {
+    // Clean up event listeners
+    this.canvas.removeEventListener('pointerdown', this.handlePointerDown);
+    document.removeEventListener('pointerup', this.handlePointerUp);
+    document.removeEventListener('pointermove', this.handlePointerMove);
   }
 
   public update(deltaTime: number, targetFrameDuration = 16): void {
@@ -753,6 +772,12 @@ class InfiniteGridMenu {
     this.render();
 
     requestAnimationFrame(t => this.run(t));
+  }
+
+  public destroy(): void {
+    if (this.control) {
+      this.control.destroy();
+    }
   }
 
   private init(onInit?: InitCallback): void {
@@ -1093,6 +1118,9 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [], onActiveItemChange })
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (sketch) {
+        sketch.destroy();
+      }
     };
   }, [items]);
 
